@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>WorkTimer</title>
+</head>
+
+<body>
+    <h1>WorkTimer: Please insert your work hours</h1>
+
+    //form for work times with limitations on day and month
+    <form th:action="@{/home}" th:object="${workTimes}" method="post">
+        <label for="day">Day</label>
+        <input type="number" th:field="*{day}" min="1" max="31" required />
+
+        <label for="month">Month</label>
+        <input type="number" th:field="*{month}" min="1" max="12" required />
+
+        <label for="startingHour">Starting time</label>
+        <input type="time" th:field="*{startingHour}" required />
+
+        <label for="endingHour">Ending time</label>
+        <input type="time" th:field="*{endingHour}" required />
+
+        <button type="submit">Save</button>
+    </form>
+
+
+    <h2>Work hours for the current month</h2>
+    //Table for displaying the current month's work times
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Day</th>
+                <th>Month</th>
+                <th>Starting Time</th>
+                <th>Ending time</th>
+                <th>Total hours</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr th:each="work" : ${workTimesList}>
+                <td th:text="${work.day}">Day</td>
+                <td th:text="${work.month}">Month</td>
+                <td th:text="${work.startingHour}">Starting Time</td>
+                <td th:text="${work.endingHour}">Ending Time</td>
+                <td th:text="${work.totalHours}">Total Hours</td>
+                //Links for delete/edit. On the Delete link we add a confirmation to avoid mistakes
+                <a href="@{/edit/{id}(id=${work.id})}">Edit</a>
+                <a href="@{/delete/{id}(id=${work.id})}" onclick="return confirm('Are you sure?');">Delete</a>
+            </tr>
+        </tbody>
+        //Total of current month's work hours
+        <tfoot>
+            <td>Total work hours during this month</td>
+            <td th:text="${totalWorkTime}"></td>
+        </tfoot>
+
+    </table>
+
+
+
+    <a href="/logout">Logout</a>
+</body>
+
+</html>
